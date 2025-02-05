@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    let s=0;
+    function add(){
+    let x=document.getElementsById("x1").value
+    let y=document.getElementsById("x2").value
+    let z=x+y
+    document.write(z)
+    
+    }
+    function sub(){
+        let x=document.getElementsById("x1").value
+    let y=document.getElementsById("x2").value
+    let z=x-y
+    data.innerHTML=z
+
+    }
+    function mul(){
+        let x=document.getElementsById("x1").value
+    let y=document.getElementsById("x2").value
+    let z=x*y
+    data.innerHTML=z
+
+    }
+    function div(){
+        let x=document.getElementsById("x1").value
+    let y=document.getElementsById("x2").value
+    let z=x/y
+    data.innerHTML=z
+
+    }
+</script>
+<body>
+    <div id="data"></div>
+    <p><input type="number" id="x1" placeholder="enter x1"></p>
+    <p><input type="number" id="x2" placeholder="enter x2"></p>
+    <button onclick="add()">submit</button>
+</body>
+</html>
