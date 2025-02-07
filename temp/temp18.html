@@ -6,9 +6,62 @@
     <title>Document</title>
     <script>
       let users = [];
-      let useremail="";
-      let username="";
-      let currbala=0;
+      let useremail = ""
+      let username = ""
+      let currBalance = 0
+      function showuser(){
+        let str="<option value=0>--Select--</option>"
+        for(let i=0;i<users.length;i++){
+            if(users[i].email!=useremail){
+                str = str +
+
+            }
+
+        }
+      }
+      function saveData(){
+        let amount=Number(document.getElementById("amount").value)
+        let type=document.getElementById("type").value
+        for(let i=0;i<users.length;i++){
+          if (users[i].email == useremail){
+            if (type=="1"){
+              users[i].balance += amount
+            }
+            else if(type=="3"){
+                let newUser=document.getElementById("selUser")
+                for(let i=0;i<)
+            }
+            else if (type=="2" && users[i].balance<amount){
+              spbalanace.innerHTML="Insufficient Balance";
+              return
+            }
+            users[i].balance -= amount
+            spBalance.innerHTML = users[i].balance
+            break
+          }
+          
+        }
+        
+      }
+      function home() {
+        let str = `
+            <h2>Welcome ${username}</h2>
+            <button onclick='showLogin()'>Logout</button>
+            <p><input type="number" id="amount" placeholder="Enter Amount"></p>
+            <p><select id="type">
+               <option value=0>--Select--</option>
+               <option value=1>Deposit</option>
+               <option value=2>Withdraw</option>
+               <option value=3>Transfer</option>
+               </select></p>
+               <select id="seluser"></select></p>
+               <
+               <button onclick='saveData()'>Submit</button>
+               <p>Current Balance: <span id='spBalance'>${currBalance}</span></p>
+
+            `;
+        root.innerHTML = str;
+      }
       function addUser() {
         let name = document.getElementById("name").value;
         let email = document.getElementById("email").value;
@@ -24,40 +77,18 @@
         users.push(user);
         showLogin();
       }
-      function home(){
-        let str = `
-            <h2>Welcome! ${username}</h2>
-            <button onclick='showLogin()'>Logout</button>
-            <p><input type="number" placeholder="Enter amount"></p>
-            <p><select id="type">
-                <option value=0>--select--</option>
-                <option value=1>Deposit</option>
-                 <option value=2>With Draw</option>
-                 </select></p>
-                 <button>submit</button>
-                 <p>currbala:${currbala}</p>
-            `;
-            root.innerHTML = str;
-
-      }
       function chkUser() {
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
         for (let i = 0; i < users.length; i++) {
           if (users[i].email == email && users[i].password == password) {
-            useremail=email
-            username=users[i].name
-            currbala=users[i].balance           
+            useremail = email
+            username = users[i].name
+            currBalance =  users[i].balance
             home();
-        }
-        //     let str = `
-        //     <h2>Welcome!</h2>
-        //     <button onclick='showLogin()'>Logout</button>
-        //     `;
-        //     root.innerHTML = str;
-          
-          else {
-            msg.innerHTML = "Access Denied"
+            break;
+          } else {
+            msg.innerHTML = "Access Denied";
           }
         }
       }
@@ -90,9 +121,9 @@
   </head>
   <body onload="showLogin()">
     <h1>HDFC Bank</h1>
-    <hr />
+    <hr>
     <div id="root"></div>
     <hr>
-    <footer>@Copyright 2025.ALL rights are reserved. </footer>
+    <h3>@Copyright 2025. All rights reserved.</h3>
   </body>
 </html>
