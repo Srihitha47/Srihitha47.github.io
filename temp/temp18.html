@@ -5,91 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script>
-      let users = [];
-      let useremail = ""
-      let username = ""
-      let currBalance = 0
-      function showuser(){
-        let str="<option value=0>--Select--</option>"
-        for(let i=0;i<users.length;i++){
-            if(users[i].email!=useremail){
-                str = str +
-
-            }
-
-        }
-      }
-      function saveData(){
-        let amount=Number(document.getElementById("amount").value)
-        let type=document.getElementById("type").value
-        for(let i=0;i<users.length;i++){
-          if (users[i].email == useremail){
-            if (type=="1"){
-              users[i].balance += amount
-            }
-            else if(type=="3"){
-                let newUser=document.getElementById("selUser")
-                for(let i=0;i<)
-            }
-            else if (type=="2" && users[i].balance<amount){
-              spbalanace.innerHTML="Insufficient Balance";
-              return
-            }
-            users[i].balance -= amount
-            spBalance.innerHTML = users[i].balance
-            break
-          }
-          
-        }
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      let useremail = "";
+      let username = "";
+      let currBalance = 0;
+      
+      function saveData() {
+        let amount = Number(document.getElementById("amount").value);
+        let type = document.getElementById("type").value;
+        let recipientEmail = document.getElementById("recipient")?.value;
         
+        for (let i = 0; i < users.length; i++) {
+          if (users[i].email == useremail) {
+            if (type == "1") {
+              users[i].balance += amount;
+            } else if (type == "2") {
+              if (users[i].balance >= amount) {
+                users[i].balance -= amount;
+              } else {
+                alert("Insufficient Balance to Withdraw");
+                return;
+              }
+            } else if (type == "3") {
+              if (users[i].balance >= amount) {
+                let recipient = users.find(user => user.email === recipientEmail);
+                if (recipient) {
+                  users[i].balance -= amount;
+                  recipient.balance += amount;
+                } else {
+                  alert("Recipient not found");
+                  return;
+                }
+              } else {
+                alert("Insufficient Balance to Transfer");
+                return;
+              }
+            }
+            currBalance = users[i].balance;
+            localStorage.setItem("users", JSON.stringify(users));
+            spBalance.innerHTML = currBalance;
+            break;
+          }
+        }
       }
       function home() {
+        let recipientInput = `
+          <p><input type="text" id="recipient" placeholder="Recipient Email" style="display:none;"></p>
+        `;
         let str = `
             <h2>Welcome ${username}</h2>
             <button onclick='showLogin()'>Logout</button>
             <p><input type="number" id="amount" placeholder="Enter Amount"></p>
-            <p><select id="type">
+            <p><select id="type" onchange="toggleRecipient()">
                <option value=0>--Select--</option>
                <option value=1>Deposit</option>
                <option value=2>Withdraw</option>
                <option value=3>Transfer</option>
                </select></p>
-               <select id="seluser"></select></p>
-               <
+               ${recipientInput}
                <button onclick='saveData()'>Submit</button>
                <p>Current Balance: <span id='spBalance'>${currBalance}</span></p>
-
             `;
         root.innerHTML = str;
+      }
+      function toggleRecipient() {
+        let type = document.getElementById("type").value;
+        let recipientInput = document.getElementById("recipient");
+        if (type == "3") {
+          recipientInput.style.display = "block";
+        } else {
+          recipientInput.style.display = "none";
+        }
       }
       function addUser() {
         let name = document.getElementById("name").value;
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
         let dob = document.getElementById("dob").value;
+        
+        if (users.find(user => user.email === email)) {
+          alert("User already exists");
+          return;
+        }
+        
         let user = {
           name: name,
           email: email,
           password: password,
           dob: dob,
-          balance:0
+          balance: 0,
         };
         users.push(user);
+        localStorage.setItem("users", JSON.stringify(users));
         showLogin();
       }
       function chkUser() {
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
-        for (let i = 0; i < users.length; i++) {
-          if (users[i].email == email && users[i].password == password) {
-            useremail = email
-            username = users[i].name
-            currBalance =  users[i].balance
-            home();
-            break;
-          } else {
-            msg.innerHTML = "Access Denied";
-          }
+        let user = users.find(user => user.email === email && user.password === password);
+        if (user) {
+          useremail = email;
+          username = user.name;
+          currBalance = user.balance;
+          home();
+        } else {
+          document.getElementById("msg").innerHTML = "Access Denied";
         }
       }
       function showForm() {
